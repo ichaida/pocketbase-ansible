@@ -40,4 +40,12 @@ ansible-playbook playbook.yml -i hosts
 **Important:**
 Once playbook done, navigate to http://DEBIAN-VM-IP/\_/ in order to setup your Admin account.
 
-> Install `pre-commit` if you want to align with Ansible best practices
+## Code Styles
+
+You can use `pre-commit` to align with Ansible best practices:
+
+```shell
+pip3 install pre-commit
+pre-commit install
+pre-commit run --all-files
+```
