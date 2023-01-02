@@ -1,0 +1,21 @@
+# {{ ansible_managed }}
+[Unit]
+Description = Pocketbase service
+After       = network.target
+
+[Service]
+Type           = simple
+User           = {{ pocketbase_user }}
+Group          = {{ pocketbase_group }}
+LimitNOFILE    = 4096
+Restart        = always
+RestartSec     = 5s
+StandardOutput = append:{{ pocketbase_log_dir }}/errors.log
+StandardError  = append:{{ pocketbase_log_dir }}/errors.log
+ExecStart      = {{ pocketbase_bin_dir }}/pocketbase \
+    --dir {{ pocketbase_data_dir }} \
+    --http="0.0.0.0:{{ pocketbase_http_port }}" \
+    serve
+
+[Install]
+WantedBy = multi-user.target

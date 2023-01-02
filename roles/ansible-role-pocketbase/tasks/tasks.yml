@@ -1,0 +1,22 @@
+---
+# role: ansible-role-pocketbase
+# file: tasks/tasks.yml
+
+- name: "Set distribution dependent variables"
+  ansible.builtin.include_vars: "{{ item }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml'
+        - '{{ ansible_distribution }}.yml'
+        - '{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml'
+      paths:
+        - 'vars'
+      skip: true
+  loop: "{{ query('first_found', params, errors='ignore') }}"
+
+- name: Include tasks for installing Pocketbase.
+  ansible.builtin.include_tasks: setup.yml
+
+- name: Include tasks for installing Nginx.
+  ansible.builtin.include_tasks: nginx.yml

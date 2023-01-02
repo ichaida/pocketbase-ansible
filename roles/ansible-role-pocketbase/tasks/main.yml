@@ -1,0 +1,7 @@
+---
+# role: ansible-role-pocketbase
+# file: tasks/main.yml
+
+- name: "Check if ansible-role-pocketbase is enabled"
+  ansible.builtin.include_tasks: tasks.yml
+  when: pocketbase_role_enabled | bool

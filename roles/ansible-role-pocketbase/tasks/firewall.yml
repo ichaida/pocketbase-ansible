@@ -1,0 +1,44 @@
+---
+# role: ansible-role-pocketbase
+# file: tasks/firewall.yml
+
+- name: Set default no-firewall
+  ansible.builtin.set_fact:
+    which_firewall: "no"
+  tags: firewall
+
+- name: Check firewall ufw
+  tags: firewall
+  block:
+    - name: Get ufw status
+      ansible.builtin.shell: "test -e `which ufw` && ufw status | sed 's/Status: //'"
+      register: reg_ufw_status
+      ignore_errors: true
+      changed_when: false
+
+    - name: Set ufw as used
+      ansible.builtin.set_fact:
+        which_firewall: "ufw"
+      changed_when: false
+      when: reg_ufw_status.stdout == 'active'
+
+- name: Check firewalld
+  tags: firewall
+  block:
+    - name: Get firewalld status
+      ansible.builtin.shell: "test -e `which firewall-cmd` && firewall-cmd --state ; echo 1 > /dev/null"
+      register: reg_firewalld_status
+      ignore_errors: true
+      changed_when: false
+
+    - name: Set firewalld as used
+      ansible.builtin.set_fact:
+        which_firewall: "firewalld"
+      changed_when: false
+      when: reg_firewalld_status.stdout == 'running'
+
+
+- name: No firewall installed
+  ansible.builtin.debug:
+    msg: "=> No firewall rules installed"
+  when: which_firewall == "no"

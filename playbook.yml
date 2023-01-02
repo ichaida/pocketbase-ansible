@@ -1,0 +1,15 @@
+---
+# role: ansible-role-pocketbase
+# play: pocketbase
+# file: playbook.yml
+
+# Playbook to list tasks with `ansible-playbook playbook.yml --list-tasks`.
+# This will get you a nice view on the structure of the role.
+- name: Install Pocketbase
+  hosts: pocketbase-host
+  become: true
+  gather_facts: true
+  vars:
+    pocketbase_role_enabled: true
+  roles:
+    - ansible-role-pocketbase

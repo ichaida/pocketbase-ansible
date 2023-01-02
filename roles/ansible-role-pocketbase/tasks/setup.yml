@@ -1,0 +1,79 @@
+---
+# file: tasks/setup.yml
+
+- name: Remove Pocketbase download directory
+  ansible.builtin.file:
+    path: "{{ pocketbase_download_dir }}"
+    state: absent
+
+- name: Add group {{ pocketbase_group }}
+  ansible.builtin.group:
+    name: "{{ pocketbase_group }}"
+    system: true
+    state: present
+
+- name: Add user {{ pocketbase_user }}
+  ansible.builtin.user:
+    name: "{{ pocketbase_user }}"
+    shell: /sbin/nologin
+    system: true
+    groups: "{{ pocketbase_group }}"
+    state: present
+
+- name: Create download directory
+  ansible.builtin.file:
+    path: "{{ pocketbase_download_dir }}"
+    owner: root
+    group: root
+    mode: 0777
+    state: directory
+
+- name: Download Pocketbase Realse {{ pocketbase_version }}
+  ansible.builtin.get_url:
+    url: "{{ pocketbase_url }}"
+    checksum: "sha256:{{ pocketbase_checksum_url }}"
+    dest: "{{ pocketbase_download_dir }}/{{ pocketbase_download_filename }}"
+    owner: root
+    group: root
+    mode: omit
+
+- name: Unarchive Pocketbase
+  ansible.builtin.unarchive:
+    src: "{{ pocketbase_download_dir }}/{{ pocketbase_download_filename }}"
+    dest: "{{ pocketbase_download_dir }}"
+    owner: root
+    group: root
+    remote_src: true
+
+- name: Install Pocketbase
+  ansible.builtin.copy:
+    src: "{{ pocketbase_download_dir }}/pocketbase"
+    dest: "{{ pocketbase_bin_dir }}"
+    owner: root
+    group: root
+    mode: '755'
+    remote_src: true
+  notify:
+    - Restart Pocketbase
+
+- name: Create Pocketbase data directory
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "{{ pocketbase_user }}"
+    group: "{{ pocketbase_group }}"
+    mode: 0700
+    state: directory
+  loop:
+    - "{{ pocketbase_data_dir }}"
+    - "{{ pocketbase_log_dir }}"
+
+- name: Install Pocketbase systemd units
+  ansible.builtin.template:
+    src: pocketbase.service.j2
+    dest: "/usr/lib/systemd/system/pocketbase.service"
+    owner: root
+    group: root
+    mode: '644'
+  notify:
+    - Reload systemd
+    - Enable start Pocketbase

@@ -1,0 +1,20 @@
+---
+# role: ansible-role-pocketbase
+# file: meta/main.yml
+
+galaxy_info:
+  role_name: pocketbase
+  author: Ismail CHAIDA
+  description: Ansible role for setting up Pocketbase.
+
+  license: MIT
+
+  min_ansible_version: "2.9"
+
+  platforms:
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all

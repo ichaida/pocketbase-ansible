@@ -1,0 +1,29 @@
+---
+# role: ansible-role-pocketbase
+# file: tasks/nginx.yml
+
+- name: Ensure Nginx is at the latest version
+  ansible.builtin.apt:
+    name: nginx
+    state: latest
+
+- name: Start Nginx
+  ansible.builtin.service:
+    name: nginx
+    state: started
+
+- name: Copy the Nginx config file and restart Nginx
+  ansible.builtin.template:
+    src: pocketbase.cfg.j2
+    dest: /etc/nginx/sites-available/pocketbase.cfg
+
+- name: Create symlink
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/pocketbase.cfg
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+
+- name: Restart Nginx
+  ansible.builtin.service:
+    name: nginx
+    state: restarted

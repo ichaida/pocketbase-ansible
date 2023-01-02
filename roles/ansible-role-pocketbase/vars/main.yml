@@ -1,0 +1,29 @@
+---
+# role: ansible-role-pocketbase
+# file: vars/main.yml
+
+# Pocketbase User/Group
+pocketbase_user: "pocketbase"
+pocketbase_group: "pocketbase"
+
+# Download configuration
+pocketbase_archive_ext: "zip"
+pocketbase_download_filename: "pocketbase-v{{ pocketbase_version }}.{{ pocketbase_archive_ext }}"
+pocketbase_download_dir: "/tmp/pocketbase"
+pocketbase_release_name: pocketbase_{{ pocketbase_version }}_{{ ansible_system | lower }}_{{ pocketbase_arch[ansible_architecture] }}
+
+# Default Directory
+pocketbase_data_dir: /var/lib/pocketbase
+pocketbase_log_dir: /var/log/pocketbase
+pocketbase_bin_dir: /usr/local/bin
+
+# Default Ports
+pocketbase_http_port: 8090
+
+# Pocketbase Binary Github URL
+pocketbase_url: "https://github.com/pocketbase/pocketbase/releases/download/v{{ pocketbase_version }}/{{ pocketbase_release_name }}.{{ pocketbase_archive_ext }}"
+pocketbase_checksum_url: "https://github.com/pocketbase/pocketbase/releases/download/v{{ pocketbase_version }}/checksums.txt"
+
+# Package Distribution (i.e. Processor)
+pocketbase_arch:
+  x86_64: amd64

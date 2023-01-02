@@ -1,0 +1,31 @@
+---
+# systemd - reload
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+# Pocketbase - enable
+- name: Enable Pocketbase
+  ansible.builtin.service:
+    name: pocketbase
+    enabled: true
+
+# Pocketbase - enable start
+- name: Enable start Pocketbase
+  ansible.builtin.service:
+    name: pocketbase
+    enabled: true
+    state: started
+
+# Pocketbase - restart
+- name: Restart Pocketbase
+  ansible.builtin.service:
+    name: pocketbase
+    state: restarted
+
+# Pocketbase - disable
+- name: Disable Pocketbase
+  ansible.builtin.service:
+    name: pocketbase
+    enabled: false
+    state: stopped
