@@ -38,7 +38,7 @@ ansible-playbook playbook.yml -i hosts
 ```
 
 **Important:**
-Once playbook done, navigate to http://DEBIAN-VM-IP/\_/ in order to setup your Admin account.
+Once playbook done, navigate to http://DEBIAN-VM-IP/_/ in order to setup your Admin account.
 
 ## Code Styles
 
